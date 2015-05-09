@@ -13,6 +13,8 @@ public class ShipMovement : MonoBehaviour {
 
 	public float rollSpeed;
 
+	private bool pilotingShip;
+
 	// Use this for initialization
 	void Start () {
 	
@@ -20,56 +22,61 @@ public class ShipMovement : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if(Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)) {
-			if(Input.GetKey(KeyCode.W)) {
-				DirectUp();
-			}
-			
-			if(Input.GetKey(KeyCode.S)) {
-				DirectDown();
-			}
-			
-			if(Input.GetKey(KeyCode.A)) {
-				StrafeLeft();
-			}
-			
-			if(Input.GetKey(KeyCode.D)) {
-				StrafeRight();
-			}
-		} else {
-			if(Input.GetKey(KeyCode.W)) {
-				accel += 0.001f;
-				GetComponent<Rigidbody>().AddForce(transform.forward * speed * thrustFactor * accel, ForceMode.Acceleration);
+		if(uPlayer.instance.isPiloting) {
+			if(Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)) {
+				if(Input.GetKey(KeyCode.W)) {
+					DirectUp();
+				}
+				
+				if(Input.GetKey(KeyCode.S)) {
+					DirectDown();
+				}
+				
+				if(Input.GetKey(KeyCode.A)) {
+					StrafeLeft();
+				}
+				
+				if(Input.GetKey(KeyCode.D)) {
+					StrafeRight();
+				}
 			} else {
-				accel = 1f;
+				if(Input.GetKey(KeyCode.W)) {
+					accel += 0.001f;
+					GetComponent<Rigidbody>().AddForce(transform.forward * speed * thrustFactor * accel, ForceMode.Acceleration);
+				} else {
+					accel = 1f;
+				}
+				if(Input.GetKey(KeyCode.S)) {
+					GetComponent<Rigidbody>().AddForce(-transform.forward * speed * thrustFactor * accel, ForceMode.Acceleration);
+				}
+
+				if(Input.GetKey(KeyCode.D)) {
+					YawRight();
+				}
+
+				if(Input.GetKey(KeyCode.A)) {
+					YawLeft();
+				}
 			}
-			if(Input.GetKey(KeyCode.S)) {
-				GetComponent<Rigidbody>().AddForce(-transform.forward * speed * thrustFactor * accel, ForceMode.Acceleration);
+
+			if(Input.GetKey(KeyCode.UpArrow)) {
+				PitchUp();
 			}
 
-			if(Input.GetKey(KeyCode.D)) {
-				YawRight();
+			if(Input.GetKey(KeyCode.DownArrow)) {
+				PitchDown();
 			}
 
-			if(Input.GetKey(KeyCode.A)) {
-				YawLeft();
+			if(Input.GetKey(KeyCode.LeftArrow)) {
+				RollLeft();
 			}
-		}
-
-		if(Input.GetKey(KeyCode.UpArrow)) {
-			PitchUp();
-		}
-
-		if(Input.GetKey(KeyCode.DownArrow)) {
-			PitchDown();
-		}
-
-		if(Input.GetKey(KeyCode.LeftArrow)) {
-			RollLeft();
-		}
-		
-		if(Input.GetKey(KeyCode.RightArrow)) {
-			RollRight();
+			
+			if(Input.GetKey(KeyCode.RightArrow)) {
+				RollRight();
+			}
+			GetComponent<Rigidbody>().isKinematic = false;
+		} else {
+			GetComponent<Rigidbody>().isKinematic = true;
 		}
 	}
 

@@ -37,6 +37,9 @@ public class UShip : MonoBehaviour {
     /// <returns>True, if addition was successful. False otherwise.</returns>
     public bool addModule(int x, int y, int z, UModule module)
     {
+        //TODO: Check if the module intersects any existing modules.
+
+        //TODO: Check if the module is connected to an existing modules.
 
         if (module is UEngineModule)
         {
